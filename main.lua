@@ -57,6 +57,56 @@ local args = {
 
 game:GetService("ReplicatedStorage").RemoteEvents.PlantSeed:InvokeServer(unpack(args))
 end
+local function Autoharvest()
+local folderplantpath = game.Workspace.ClientPlants
+local plantposition = {}
+
+--locate position and put it in table
+for i, plant in pairs(folderplantpath:GetChildren()) do
+    for j, rootpart in pairs(plant:GetDescendants()) do
+        if (rootpart.Name == "FruitAnchor" or rootpart.Name == "PlantAnchor") and rootpart:IsA("BasePart") then
+            table.insert(plantposition, rootpart.Position)
+        end
+    end
+end
+
+--loop TP
+for i, pos in ipairs(plantposition) do
+    local char = game.Players.LocalPlayer.Character
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    
+    if hrp then
+        -- Res velo prev take off
+        hrp.AssemblyLinearVelocity = Vector3.zero
+        hrp.AssemblyAngularVelocity = Vector3.zero
+
+       --new pos but +3y prev drowning
+        hrp.CFrame = CFrame.new(pos + Vector3.new(0, 3, 0))
+
+        task.wait(0.2)
+        
+        -- fake hit E
+        local vim = game:GetService("VirtualInputManager")
+        vim:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+        task.wait(0.1)
+        vim:SendKeyEvent(false, Enum.KeyCode.E, false, game)
+        
+        task.wait(0.5) 
+    end
+end
+end
+local function autoequip(Tool)
+local player = game.Players.LocalPlayer
+local char = player.Character 
+local hum = char:WaitForChild("Humanoid")
+local backpack = player:WaitForChild("Backpack")
+
+-- check if shov in inv
+local tool = backpack:FindFirstChild(Tool) 
+ if tool.Parent == backpack then
+        hum:EquipTool(tool)
+ end
+end
 print(ownedhmai1)
 print(ownedhmai2)
 print(ownedhmai3)
@@ -72,7 +122,7 @@ Startaxist={
 [2]=185.5998077392578,
 [3]=321.2134094238281
 }
-print("Pot1 chosen")
+print("Pot1 choosen")
 elseif string.len(ownedhmai2)<=0 then
     game:GetService("ReplicatedStorage").RemoteEvents.ClaimSelectedPlot:FireServer("Plot2")
 task.wait(0.1)
@@ -82,7 +132,7 @@ Startaxist={
 [2]=208.60287475585938,
 [3]=402.1802673339844
 }
-print("Pot2 chosen")
+print("Pot2 choosen")
 elseif string.len(ownedhmai3)<=0 then
     game:GetService("ReplicatedStorage").RemoteEvents.ClaimSelectedPlot:FireServer("Plot3")
 task.wait(0.1)
@@ -92,7 +142,7 @@ Startaxist={
 [2]=215.09982299804688,
 [3]=768.2178344726562
 }
-print("Pot3 chosen")
+print("Pot3 choosen")
 elseif string.len(ownedhmai4)<=0 then
     game:GetService("ReplicatedStorage").RemoteEvents.ClaimSelectedPlot:FireServer("Plot4")
 task.wait(0.1)
@@ -102,7 +152,7 @@ Startaxist={
 [2]=187.0998077392578,
 [3]=956.351806640625
 }
-print("Pot4 chosen")
+print("Pot4 choosen")
 elseif string.len(ownedhmai5)<=0 then
     game:GetService("ReplicatedStorage").RemoteEvents.ClaimSelectedPlot:FireServer("Plot5")
 task.wait(0.1)
@@ -112,7 +162,7 @@ Startaxist={
 [2]=197.0998077392578,
 [3]=847.1944580078125
 }
-print("Pot5 chosen")
+print("Pot5 choosen")
 else
   game:GetService("ReplicatedStorage").RemoteEvents.ClaimSelectedPlot:FireServer("Plot6")
 task.wait(0.1)
@@ -123,8 +173,10 @@ Startaxist={
 [3]=352.55023193359375
 
 }
-print("Pot6 chosen")
+print("Pot6 choosen")
 end
 print(Startaxist[1] .. ", " .. Startaxist[2] .. ", " .. Startaxist[3])
+
+
 
 
