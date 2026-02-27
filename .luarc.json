@@ -1,0 +1,13 @@
+{
+    "diagnostics.globals": [
+        "game",
+        "workspace",
+        "script",
+        "Enum",
+        "task",
+        "Vector3",
+        "CFrame",
+        "Instance",
+        "warn"
+    ]
+}
