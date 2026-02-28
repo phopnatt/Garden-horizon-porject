@@ -210,6 +210,7 @@ task.wait(5)
  local targetPos = Vector3.new(unpack(Startaxist)) + Vector3.new(0, 5, 6)
 game.Players.LocalPlayer.Character:PivotTo(CFrame.new(targetPos))
 while true do
-   Autobuyseed("Carrot")
+    task.wait(1)
+   Autobuyseed("Carrot Seed")
 
 end
