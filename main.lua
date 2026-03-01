@@ -15,8 +15,9 @@ local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local seedlist={"Carrot","Corn","Onion","Strawberry","Mushroom","Beetroot","Tomato","Apple","Banana","Plum","Potato","Cabbage","Cherry"}
-local Gearshoplistbuylist={}
+local Gearshoplist={"Watering Can","Basic Sprinkler","Turbo Sprinkler","Super sprinkler"}
 local Startaxist=nil
+
 
 
 
@@ -179,6 +180,37 @@ local function Autoplant(Plant)
 game:GetService("ReplicatedStorage").RemoteEvents.PlantSeed:InvokeServer(Plant,Vector3.new(unpack(Startaxist) ))
 end
 
+local function Autobuygearshop(Gear)
+    
+
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(212.79725646972656, 204.04000854492188, 609.1134643554688)
+task.wait(0.5)
+game:GetService("ReplicatedStorage").RemoteEvents.PurchaseShopItem:InvokeServer("GearShop",Gear)
+end
+
+local function Autousegear4snakeman(Gearname)
+game:GetService("ReplicatedStorage").RemoteEvents.UseGear:FireServer(Gearname,{
+        ["position"] = Vector3.new(unpack(Startaxist))
+    })
+end
+
+local function Autoclaimquest()
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ClaimQuest = ReplicatedStorage.RemoteEvents.ClaimQuest
+local questTypes = {"Weekly", "Daily"}
+
+for j, qType in ipairs(questTypes) do
+    for i = 1, 5 do
+        local success, err = pcall(function()
+            ClaimQuest:FireServer(qType, tostring(i))
+        end)
+        
+        if not success then
+            break
+        end
+    end
+end
+end
 task.wait(2)
 
 while true do
