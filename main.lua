@@ -15,8 +15,9 @@ local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 local seedlist={"Carrot","Corn","Onion","Strawberry","Mushroom","Beetroot","Tomato","Apple","Banana","Plum","Potato","Cabbage","Cherry"}
-local Gearshoplist={"Watering Can","Basic Sprinkler","Turbo Sprinkler","Super sprinkler"}
+local Gearshoplist={"Super sprinkler","Turbo Sprinkler","Basic Sprinkler"}
 local Startaxist=nil
+local seedStock={}
 
 
 
@@ -37,7 +38,7 @@ local function GetMyPlot()
             print(plot)
             plotaxits=plotaxits[tostring(plot)]
             Startaxist=plotaxits
-            
+           
             return plot
         end
     end
@@ -105,6 +106,7 @@ for i, pos in ipairs(plantposition) do
     end
 end
 end
+
 local function Autobuyseed(Name)--buyseed "{Name} Seed" Like Carrot Seed
 shoppos={
 [1]=176.7036895751953,
@@ -121,60 +123,6 @@ task.wait(0.1)
 
 game:GetService("ReplicatedStorage").RemoteEvents.PurchaseShopItem:InvokeServer(unpack(buyseed))--remote to buy seed
 end
- -- Prev enless loop
-
-
-local function AutoequipSeed()
-    -- 1if it is working or die then break
-local player = game.Players.LocalPlayer
-local backpack = player:WaitForChild("Backpack")
-local isEquipping = false
-    if isEquipping then return end
-    
-    local character = player.Character
-    if not character then return end
-    
-    local humanoid = character:FindFirstChildOfClass("Humanoid")
-    if not humanoid or humanoid.Health <= 0 then return end
-
-    -- if holding seed then break
-    local currentTool = character:FindFirstChildOfClass("Tool")
-    if currentTool and string.find(currentTool.Name:lower(), "seed") then
-        return 
-    end
-
-   
-    local success, err = pcall(function()
-        for _, item in pairs(backpack:GetChildren()) do
-            -- Search for "Seed"
-            if item:IsA("Tool") and string.find(item.Name:lower(), "seed") then
-                
-                isEquipping = true --start
-                humanoid:EquipTool(item)
-                task.wait(0.3) 
-                isEquipping = false 
-                
-                -- check if item is out of hand
-                item.Unequipped:Connect(function()
-                    if isEquipping then return end
-                    task.wait(0.1)
-                    
-                    -- if item lost exec again
-                    if item.Parent == backpack or not item.Parent then
-                        AutoequipSeed()
-                    end
-                end)
-                
-                return -- Founded end loop
-            end
-        end
-    end)
-
-    if not success then
-        warn("Autoequip Error: " .. err)
-        isEquipping = false -- if not complete dequip
-    end
-end
 
 local function Autoplant(Plant)
 game:GetService("ReplicatedStorage").RemoteEvents.PlantSeed:InvokeServer(Plant,Vector3.new(unpack(Startaxist) ))
@@ -188,11 +136,18 @@ task.wait(0.5)
 game:GetService("ReplicatedStorage").RemoteEvents.PurchaseShopItem:InvokeServer("GearShop",Gear)
 end
 
-local function Autousegear4snakeman(Gearname)
+local function Autousegear(Gearname)
 game:GetService("ReplicatedStorage").RemoteEvents.UseGear:FireServer(Gearname,{
         ["position"] = Vector3.new(unpack(Startaxist))
     })
 end
+--Vector3.new(unpack(Startaxist)) + Vector3.new(0, 5, 6)
+local function Autousesprinkler(Gearname)
+game:GetService("ReplicatedStorage").RemoteEvents.UseGear:FireServer(Gearname,{
+        ["position"] = Vector3.new(unpack(Startaxist)) + Vector3.new(0, 5, 6)
+    })
+end
+--Vect
 
 local function Autoclaimquest()
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -212,39 +167,129 @@ for j, qType in ipairs(questTypes) do
 end
 end
 task.wait(2)
+local function Autotp2startaxist()
+    local targetPos = Vector3.new(unpack(Startaxist)) + Vector3.new(0, 5, 6)
+game.Players.LocalPlayer.Character:PivotTo(CFrame.new(targetPos))
+end
 
+local function Autocheckgearstock()
+local stockkkinggear={}
+local x=game:GetService("Players")["LocalPlayer"].PlayerGui.GearShop.Frame.ScrollingFrame:GetChildren()
+for i,gearlist in pairs(x) do
+   if gearlist:IsA("Frame") and gearlist.Name~="ItemTemplate" and gearlist.DataCost>50   then
+        print(gearlist.MainInfo.NoStock.Visible)
+        if gearlist.MainInfo.NoStock.Visible==false then
+            table.insert(stockkkinggear,gearlist.Name)
+        end
+    end
+    
+end
+print(unpack(stockkkinggear))
+end
+
+local function Autocheckseedstock()
+local stockkkingseed={}
+local x=game:GetService("Players")["LocalPlayer"].PlayerGui.SeedShop.Frame.ScrollingFrame:GetChildren()
+for i,seedlist in pairs(x) do
+   if seedlist:IsA("Frame") and seedlist.Name~="ItemTemplate" and seedlist.DataCost>50   then
+        print(seedlist.MainInfo.NoStock.Visible)
+        if seedlist.MainInfo.NoStock.Visible==false then
+            table.insert(stockkkingseed,seedlist.Name.." ".."Seed")
+            table.insert(seedStock,seedlist.Name.." ".."Seed")
+    end    
+end
+end
+print(unpack(stockkkingseed))
+end
+
+local function AutoEquipseed()
+local x=game:GetService("Players")["LocalPlayer"].Backpack:GetChildren()
+local seedinbackpack={}
+for i,v in pairs(x) do
+    if string.find(v.Name,"Seed") and not string.find(v.Name,"Pack") then
+table.insert(seedinbackpack,v)
+end
+end
+math.randomseed(os.time()) 
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local randomedseed = seedinbackpack[math.random(#seedinbackpack)]
+
+print(randomedseed)
+
+character.Humanoid:EquipTool(randomedseed)
+end
+
+local function AutoEquipgear(gearname)--you SHOLDDDD PCALLL THIS FUNCCCCCCCC
+local x=game:GetService("Players")["LocalPlayer"].Backpack:GetChildren()
+local gearinbackpack={}
+for i,v in pairs(x) do
+    if string.find(v.Name,gearname)   then
+table.insert(gearinbackpack,v)
+end
+end
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local randomedgear = gearinbackpack[1]
+
+print(randomedgear)
+
+character.Humanoid:EquipTool(randomedgear)
+end
 while true do
+Autocheckseedstock()
+for i=1,3 do
+for i,j in pairs(seedStock) do
     task.wait(1)
-for i,pants in pairs(seedlist) do
-for i= 1,5 do
-    task.wait(0.5)
-    Autobuyseed(pants.." ".."Seed")
+Autobuyseed(j)
 end
 end
-
- local targetPos = Vector3.new(unpack(Startaxist)) + Vector3.new(0, 5, 6)
-game.Players.LocalPlayer.Character:PivotTo(CFrame.new(targetPos))
-AutoequipSeed()
-
-for i,seedss in pairs(seedlist) do
-for i=1,30 do
-task.wait(0.5)
-pcall(function()
-    Autoplant("Carrot") 
-end)
-Autoplant(seedss)
+if game:GetService("Players")["LocalPlayer"].leaderstats.Shillings.Value>30000 then
+ Autobuygearshop("Watering Can")
 end
+if game:GetService("Players")["LocalPlayer"].leaderstats.Shillings.Value>50000 then
+ Autobuygearshop("Basic Sprinkler")
 end
-
-pcall(function()
-    Autoharvest()
-end)
-local targetPos = Vector3.new(unpack(Startaxist)) + Vector3.new(0, 5, 6)
-game.Players.LocalPlayer.Character:PivotTo(CFrame.new(targetPos))
-
+if game:GetService("Players")["LocalPlayer"].leaderstats.Shillings.Value>100000 then
+ Autobuygearshop("Turbo Sprinkler")
+end
+if game:GetService("Players")["LocalPlayer"].leaderstats.Shillings.Value>200000 then
+ Autobuygearshop("Super Sprinkler")
+end
+seedStock=nil--reset sock list
+Autotp2startaxist()
+pcall(function()AutoEquipgear("Sprinkler") end)-- equip sprinkler
+task.wait(4)
+for i,u in pairs(Gearshoplist) do
+Autousesprinkler(u)
+end
+AutoEquipseed()
+task.wait(5)
+print("Kuytok")
 for i=1,4 do
+for i,v in pairs(seedlist) do
+Autoplant(v)
+end
+end
+pcall(function()AutoEquipgear("Watering Can")
+end)--equip gear
+task.spawn(function()
+for i=1,10 do
+task.wait(1)
+Autousegear("Watering Can")
+print(i)
+end
+end)
 task.wait(0.5)
+Autoharvest()
+wait(2)
 Autosellall()
+task.spawn(function()
+    Autoclaimquest()
+end)
 end
 
-end  
+
+
+
+
