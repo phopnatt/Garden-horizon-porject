@@ -14,7 +14,7 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local VirtualInputManager = game:GetService("VirtualInputManager")
-local seedlist={"Carrot","Corn","Onion","Strawberry","Mushroom","Beetroot","Tomato","Apple","Banana","Plum","Potato","Cabbage","Cherry"}
+local seedlist={"Carrot","Corn","Onion","Strawberry","Mushroom","Beetroot","Tomato","Apple","Banana","Plum","Potato","Cabbage","Cherry","Dandelion","Sunpetal","Bellpepper","Goldenberry","Beetroot","Birch","Amber Pine","Wheat","Plum","Potato","Orange","Cabbage","Dawnfruit","Olive"}
 local Gearshoplist={"Super sprinkler","Turbo Sprinkler","Basic Sprinkler"}
 local Startaxist=nil
 local seedStock={}
@@ -243,6 +243,7 @@ for i,j in pairs(seedStock) do
     task.wait(1)
 Autobuyseed(j)
 end
+local seedStock=nil
 end
 if game:GetService("Players")["LocalPlayer"].leaderstats.Shillings.Value>30000 then
  Autobuygearshop("Watering Can")
@@ -256,7 +257,6 @@ end
 if game:GetService("Players")["LocalPlayer"].leaderstats.Shillings.Value>200000 then
  Autobuygearshop("Super Sprinkler")
 end
-seedStock=nil--reset sock list
 Autotp2startaxist()
 pcall(function()AutoEquipgear("Sprinkler") end)-- equip sprinkler
 task.wait(4)
