@@ -237,6 +237,7 @@ print(randomedgear)
 character.Humanoid:EquipTool(randomedgear)
 end
 while true do
+    wait(1)
 Autocheckseedstock()
 for i=1,3 do
 for i,j in pairs(seedStock) do
@@ -263,7 +264,7 @@ task.wait(4)
 for i,u in pairs(Gearshoplist) do
 Autousesprinkler(u)
 end
-AutoEquipseed()
+pcall(function()AutoEquipseed() end)
 task.wait(5)
 print("Kuytok")
 for i=1,4 do
@@ -281,9 +282,11 @@ print(i)
 end
 end)
 task.wait(0.5)
-Autoharvest()
-wait(2)
+pcall(function()Autoharvest() end)
+for i=1,3 do
+    task.wait(1)
 Autosellall()
+end
 task.spawn(function()
     Autoclaimquest()
 end)
