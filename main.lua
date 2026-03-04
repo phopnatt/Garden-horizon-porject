@@ -244,7 +244,7 @@ for i,j in pairs(seedStock) do
     task.wait(1)
 Autobuyseed(j)
 end
-local seedStock=nil
+seedStock=nil
 end
 if game:GetService("Players")["LocalPlayer"].leaderstats.Shillings.Value>30000 then
  Autobuygearshop("Watering Can")
