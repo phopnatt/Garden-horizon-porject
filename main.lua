@@ -36,7 +36,7 @@ local function GetMyPlot()
     for _, plot in ipairs(workspace.Plots:GetChildren()) do
         if plot:GetAttribute("Owner") == LocalPlayer.UserId then
             print(plot)
-            plotaxits=plotaxits[tostring(plot)]
+            plotaxits=plotaxits[plot]
             Startaxist=plotaxits
            
             return plot
