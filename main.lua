@@ -36,7 +36,7 @@ local function GetMyPlot()
     for _, plot in ipairs(workspace.Plots:GetChildren()) do
         if plot:GetAttribute("Owner") == LocalPlayer.UserId then
             print(plot)
-            plotaxits=plotaxits[plot]
+            plotaxits=plotaxits[tostring(plot)]
             Startaxist=plotaxits
            
             return plot
@@ -236,10 +236,9 @@ print(randomedgear)
 
 character.Humanoid:EquipTool(randomedgear)
 end
-pcall(function()while true do
+while true do
     task.wait(1)
-
-pcall(function()Autocheckseedstock() end)
+Autocheckseedstock()
 for i=1,3 do
 for i,j in pairs(seedStock) do
     task.wait(1)
@@ -324,7 +323,7 @@ task.spawn(function()
     Autoclaimquest()
 end)
 end
-end)
+
 
 
 
