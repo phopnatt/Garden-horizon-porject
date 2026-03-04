@@ -14,11 +14,11 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local VirtualInputManager = game:GetService("VirtualInputManager")
-local seedlist={"Carrot","Corn","Onion","Strawberry","Mushroom","Beetroot","Tomato","Apple","Banana","Plum","Potato","Cabbage","Cherry","Dandelion","Sunpetal","Bellpepper","Goldenberry","Beetroot","Birch","Amber Pine","Wheat","Plum","Potato","Orange","Cabbage","Dawnfruit","Olive"}
+local seedlist={"Carrot","Corn","Onion","Strawberry","Mushroom","Beetroot","Tomato","Apple","Banana","Plum","Potato","Cabbage","Cherry","Dandelion","Sunpetal","Bellpepper","Goldenberry","Beetroot","Birch","Amber Pine","Wheat","Plum","Potato","Orange","Cabbage","Dawnfruit","Olive","Rose"}
 local Gearshoplist={"Super sprinkler","Turbo Sprinkler","Basic Sprinkler"}
 local Startaxist=nil
 local seedStock={}
-
+local randomedseed=nil
 
 
 
@@ -213,7 +213,7 @@ end
 math.randomseed(os.time()) 
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
-local randomedseed = seedinbackpack[math.random(#seedinbackpack)]
+randomedseed = seedinbackpack[math.random(#seedinbackpack)]
 
 print(randomedseed)
 
@@ -237,7 +237,7 @@ print(randomedgear)
 character.Humanoid:EquipTool(randomedgear)
 end
 while true do
-    wait(1)
+    task.wait(1)
 Autocheckseedstock()
 for i=1,3 do
 for i,j in pairs(seedStock) do
@@ -265,20 +265,49 @@ for i,u in pairs(Gearshoplist) do
 Autousesprinkler(u)
 end
 pcall(function()AutoEquipseed() end)
-task.wait(5)
 print("Kuytok")
-for i=1,4 do
+
+local player=game:GetService("Players").LocalPlayer.Name  --Fix laterr
+print(player)--this should not be gobal fixxxxx
+local char=nil
+pcall(function()
+for i,v in pairs(workspace:GetChildren()) do
+    task.wait(0.1)
+if player==v.Name then
+
+    char =v
+end
+end
+repeat
+
+
+
 for i,v in pairs(seedlist) do
+    task.wait(0.1)
 Autoplant(v)
 end
+
+for i,v in pairs(char:GetChildren()) do
+    task.wait(0.1)
+if string.find(v.Name,"Seed") then
+    print(v)
+    randomedseed=v.name
 end
+end
+
+
+task.wait(0.1)
+until not char:FindFirstChild(randomedseed)
+print(randomedseed)
+--not string.find(randomedseed,"x")
+end)
+randomedseed=nil
 pcall(function()AutoEquipgear("Watering Can")
 end)--equip gear
 task.spawn(function()
 for i=1,10 do
 task.wait(1)
 Autousegear("Watering Can")
-print(i)
 end
 end)
 task.wait(0.5)
@@ -291,6 +320,8 @@ task.spawn(function()
     Autoclaimquest()
 end)
 end
+
+
 
 
 
