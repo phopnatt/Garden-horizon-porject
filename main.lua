@@ -244,7 +244,7 @@ for i,j in pairs(seedStock) do
     task.wait(1)
 Autobuyseed(j)
 end
-seedStock=nil
+
 end
 if game:GetService("Players")["LocalPlayer"].leaderstats.Shillings.Value>30000 then
  Autobuygearshop("Watering Can")
@@ -258,6 +258,7 @@ end
 if game:GetService("Players")["LocalPlayer"].leaderstats.Shillings.Value>200000 then
  Autobuygearshop("Super Sprinkler")
 end
+seedStock=nil
 Autotp2startaxist()
 pcall(function()AutoEquipgear("Sprinkler") end)-- equip sprinkler
 task.wait(4)
