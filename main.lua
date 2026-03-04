@@ -258,7 +258,7 @@ end
 if game:GetService("Players")["LocalPlayer"].leaderstats.Shillings.Value>200000 then
  Autobuygearshop("Super Sprinkler")
 end
-seedStock=nil
+seedStock={}
 Autotp2startaxist()
 pcall(function()AutoEquipgear("Sprinkler") end)-- equip sprinkler
 task.wait(4)
