@@ -236,9 +236,10 @@ print(randomedgear)
 
 character.Humanoid:EquipTool(randomedgear)
 end
-while true do
+pcall(function()while true do
     task.wait(1)
-Autocheckseedstock()
+
+pcall(function()Autocheckseedstock() end)
 for i=1,3 do
 for i,j in pairs(seedStock) do
     task.wait(1)
@@ -323,7 +324,7 @@ task.spawn(function()
     Autoclaimquest()
 end)
 end
-
+end)
 
 
 
