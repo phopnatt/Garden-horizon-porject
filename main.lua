@@ -284,7 +284,9 @@ repeat
 
 for i,v in pairs(seedlist) do
     task.wait(0.1)
+    for i=1,5 do
 Autoplant(v)
+    end
 end
 
 for i,v in pairs(char:GetChildren()) do
