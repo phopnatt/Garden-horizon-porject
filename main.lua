@@ -376,7 +376,7 @@ do
                     task.wait(0.05)
                     vim:SendKeyEvent(false, Enum.KeyCode.E, false, game)
                     
-                    task.wait(0.5) เ
+                    task.wait(0.5) 
                 end
             end
         end
