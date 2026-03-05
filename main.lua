@@ -1,6 +1,17 @@
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 if not game:IsLoaded() then
     game.Loaded:Wait()
 end
+pcall(function()
+ Fluent:Notify({
+        Title = "J4Z4 HUB loadding UI",
+        Content = "Fluent UI by dawid-scripts https://github.com/dawid-scripts/Fluent",
+        
+        Duration = 4 -- Set to nil to make the notification not disappear
+    })
+end)
 local plotaxits=
 {
 ["Plot1"]={189.7528076171875,185.5998077392578,321.2134094238281},
@@ -103,7 +114,11 @@ for i, pos in ipairs(plantposition) do
         vim:SendKeyEvent(false, Enum.KeyCode.E, false, game)
         
         task.wait(0.5) 
+      if Kuy==false then
+   break
+      end
     end
+     
 end
 end
 
@@ -173,7 +188,7 @@ game.Players.LocalPlayer.Character:PivotTo(CFrame.new(targetPos))
 end
 
 local function Autocheckgearstock()
-local stockkkinggear={}
+ stockkkinggear={}
 local x=game:GetService("Players")["LocalPlayer"].PlayerGui.GearShop.Frame.ScrollingFrame:GetChildren()
 for i,gearlist in pairs(x) do
    if gearlist:IsA("Frame") and gearlist.Name~="ItemTemplate" and gearlist.DataCost>50   then
@@ -236,7 +251,352 @@ print(randomedgear)
 
 character.Humanoid:EquipTool(randomedgear)
 end
+
+
+
+task.spawn(function()
+    while true do
+        Autocheckseedstock() 
+        task.wait(60)
+local seedStock={}
+    end
+    end)
+
+
+local Window = Fluent:CreateWindow({
+    Title = "J4Z4 HUB " .. "Beta V.2.3",
+    SubTitle = "by darkflower",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
+})
+
+--Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
+local Tabs = {
+    Main = Window:AddTab({ Title = "Main", Icon = "" }),
+    Kaiton = Window:AddTab({ Title = "Kaiton", Icon = "" }),
+    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
+}
+
+local Options = Fluent.Options
+
+do
+    Fluent:Notify({
+        Title = "J4Z4 HUB",
+        Content = "© 2026 J4Z4. All rights reserved. No part of this project may be reproduced, distributed, or modified for commercial purposes without prior written permission.",
+        SubContent = "SubContent", -- Optional
+        Duration = 5 -- Set to nil to make the notification not disappear
+    })
+
+
+
+    Tabs.Main:AddParagraph({
+        Title = "Auto Farm",
+        Content = "All Auto Farm function will be placed here"
+    })
+
+
+
+    Tabs.Main:AddButton({
+        Title = "Sell all",
+        Description = "Click to sell all",
+        Callback = function()
+            Window:Dialog({
+                Title = "Auto sell all",
+                Content = "Would you like to sell all fruits?",
+                Buttons = {
+                    {
+                        Title = "Confirm",
+                        Callback = function()
+                            print("Selling items")
+                            for i=1,3 do 
+                                Autosellall()
+                            end
+                        end
+                    },
+                    {
+                        Title = "Cancel",
+                        Callback = function()
+                            print("Cancelled")
+                        end
+                    }
+                }
+            })
+        end
+    })
+
+
+
+    local Toggle = Tabs.Main:AddToggle("MyToggle", {Title = "Auto Harvest", Default = false })
+
+    Toggle:OnChanged(function()
+        print("Auto harvest: ", Options.MyToggle.Value)
+        if Options.MyToggle.Value then
+    print("A")
+    
+	    local folderplantpath = game.Workspace.ClientPlants
+local plantposition = {}
+
+--locate position and put it in table
+for i, plant in pairs(folderplantpath:GetChildren()) do
+    for j, rootpart in pairs(plant:GetDescendants()) do
+        if (rootpart.Name == "FruitAnchor" or rootpart.Name == "PlantAnchor") and rootpart:IsA("BasePart") then
+            table.insert(plantposition, rootpart.Position)
+        end
+    end
+end
+
+--loop TP
+for i, pos in ipairs(plantposition) do
+    local char = game.Players.LocalPlayer.Character
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    
+    if hrp then
+        -- Res velo prev take off
+        hrp.AssemblyLinearVelocity = Vector3.zero
+        hrp.AssemblyAngularVelocity = Vector3.zero
+
+       --new pos but +3y prev drowning
+        hrp.CFrame = CFrame.new(pos + Vector3.new(0, 3, 0))
+
+        task.wait(0.2)
+        
+        -- fake hit E
+        local vim = game:GetService("VirtualInputManager")
+        vim:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+        task.wait(0.1)
+        vim:SendKeyEvent(false, Enum.KeyCode.E, false, game)
+        
+        task.wait(0.5) 
+      if Options.MyToggle.Value==false then
+   break
+      end
+    end
+     
+end
+	else
+        
+	  print("B")  
+        
+    end 
+        
+
+    end)
+        local Toggle2 = Tabs.Main:AddToggle("MyToggle2", {Title = "Auto plant seed", Default = false })
+
+    Toggle2:OnChanged(function()
+        print("Toggle changed:", Options.MyToggle2.Value)
+    end)
+    task.spawn(function()
+    while true do
+        
+        task.wait(0.1) 
+
+        if Options.MyToggle2.Value == true then
+            task.wait(1)
+            Autotp2startaxist()
+            AutoEquipseed()
+
+            for i, v in pairs(seedlist) do
+                
+                if not Options.MyToggle2.Value then break end
+
+                task.wait(0.1)
+                for i = 1, 5 do
+                    
+                    if not Options.MyToggle2.Value then break end
+                    
+                    Autoplant(v)
+                    task.wait(0.05)
+                end
+            end
+        end
+    end
+end)
+    
+
+   
+
+    
+
+
+
+
+
+    
+  Tabs.Main:AddParagraph({
+        Title = "Auto buy seed",
+        Content = "Every seed function will be placed here"
+    })
+    
+
+
+    pcall(function()task.spawn(function()Autocheckseedstock() end) end)
+    local MultiDropdown = Tabs.Main:AddDropdown("MultiDropdown", {
+        Title = "Seed sniper",
+        Description = "Select seed sniper list",
+        Values = seedlist,
+        Multi = true,
+        Default = {},
+    })
+
+    MultiDropdown:SetValue({
+        three = true,
+        five = true,
+        seven = false
+    })
+
+    MultiDropdown:OnChanged(function(Value)
+        local Values = {}
+        for Value, State in next, Value do
+            table.insert(Values, Value)
+        end
+        print("Mutlidropdown changed:", table.concat(Values, ", "))
+    end)
+
+
+
+    local Toggle3 = Tabs.Main:AddToggle("MyToggle3", {Title = "Auto Seed sniper", Default = false })
+
+     task.spawn(function()
+    while true do
+        if Options.MyToggle3.Value == true then
+            
+            for seedName, isSelected in pairs(MultiDropdown.Value) do
+                if isSelected then
+                    local fullName = seedName .. " Seed"
+                    
+                    
+                    if table.find(seedStock, fullName) then
+                        print("Founded: " .. fullName .. "buying")
+                        Autobuyseed(fullName)
+                        task.wait(0.1) 
+                    else
+                       
+                        print("There's no following seed in stock : " .. fullName )
+                    end
+                end
+            end
+        end
+        task.wait(1) 
+    end
+end)
+
+     local Toggle4 = Tabs.Main:AddToggle("MyToggle4", {Title = "Auto buy all seeds", Default = false })
+
+Toggle4:OnChanged(function()
+    print("Toggle changed:", Options.MyToggle4.Value)
+end)
+
+
+task.spawn(function()
+    
+    while true do
+        if Options.MyToggle4.Value == true then
+        
+            for i = 1, 3 do
+                for _, seedFullName in pairs(seedStock) do
+                    Autobuyseed(seedFullName)
+                    task.wait(0.1) 
+                end
+                if Options.MyToggle4.Value == false then break end
+            end
+            task.wait(5) 
+        end
+        
+        task.wait(1)
+    
+    end
+end)
+  Tabs.Main:AddParagraph({
+        Title = "Gear shop",
+        Content = "Gear shop function will be placed here"
+    })
+task.spawn(function()
+    while true do 
+        
+        Autocheckgearstock()
+        
+        task.wait(30)
+        stockkkinggear={}
+    end
+end)
+        local MultiDropdown2 = Tabs.Main:AddDropdown("MultiDropdown2", {
+        Title = "Gear sniper",
+        Description = "Select your gear sniper list",
+        Values = {"Super sprinkler","Turbo Sprinkler","Basic Sprinkler","Watering Can","Harvest Bell","Trowel","Favorite Tool"},
+        Multi = true,
+        Default = {},
+    })
+
+    MultiDropdown2:SetValue({
+        three = true,
+        five = true,
+        seven = false
+    })
+
+    MultiDropdown2:OnChanged(function(Value)
+        local Values = {}
+        for Value, State in next, Value do
+            table.insert(Values, Value)
+        end
+        print("Mutlidropdown changed:", table.concat(Values, ", "))
+    end)
+    
+       local Toggle8 = Tabs.Main:AddToggle("MyToggle8", {Title = "Auto gear sniper", Default = false })
+
+    Toggle8:OnChanged(function()
+        print("Toggle changed:", Options.MyToggle8.Value)
+    end)
+    task.spawn(function()
 while true do
+        if Options.MyToggle8.Value == true then
+            
+            for seedName, isSelected in pairs(MultiDropdown2.Value) do
+                if isSelected then
+                    local fullName = seedName 
+                    
+                    
+                    if table.find(stockkkinggear, fullName) then
+                        print("Founded: " .. fullName .. "buying")
+                        Autobuygearshop(fullName)
+                        task.wait(0.1) 
+                    else
+                       
+                        print("There's no following gear in stock : " .. fullName )
+                    end
+                end
+            end
+        end
+        task.wait(1) 
+    end
+
+end)
+        
+    
+
+   
+    
+
+    
+    
+    Tabs.Kaiton:AddParagraph({
+        Title = "Kaiton 1 click",
+        Content = "Hit only one button and it will automaticaly farm for you"
+    })
+    
+    local Toggle5 = Tabs.Kaiton:AddToggle("MyToggle5", {Title = "Auto Farm 1 click (Kaiton 1 click) ", Default = false })
+
+    Toggle5:OnChanged(function()
+        print("Toggle changed:", Options.MyToggle5.Value)
+    end)
+task.spawn(function()
+
+while true do
+    task.wait(1)
+    if Options.MyToggle5.Value==true then
     task.wait(1)
 Autocheckseedstock()
 for i=1,3 do
@@ -322,11 +682,60 @@ end
 task.spawn(function()
     Autoclaimquest()
 end)
+if Options.MyToggle5.Value==false then break end
+end
+end
+
+ end)
+
+
+
+ 
+
+    
+
+    
+
+
+
+
+
 end
 
 
+-- Addons:
+-- SaveManager (Allows you to have a configuration system)
+-- InterfaceManager (Allows you to have a interface managment system)
+
+-- Hand the library over to our managers
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+
+-- Ignore keys that are used by ThemeManager.
+-- (we dont want configs to save themes, do we?)
+SaveManager:IgnoreThemeSettings()
+
+-- You can add indexes of elements the save manager should ignore
+SaveManager:SetIgnoreIndexes({})
+
+-- use case for doing it this way:
+-- a script hub could have themes in a global folder
+-- and game configs in a separate folder per game
+InterfaceManager:SetFolder("J4Z4HUB")
+SaveManager:SetFolder("J4Z4HUB/specific-game")
+
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
 
 
+Window:SelectTab(1)
 
+Fluent:Notify({
+    Title = "J4Z4 HUB",
+    Content = "UI has been loaded suscessfully",
+    Duration = 8
+})
 
-
+-- You can use the SaveManager:LoadAutoloadConfig() to load a config
+-- which has been marked to be one that auto loads!
+SaveManager:LoadAutoloadConfig()
