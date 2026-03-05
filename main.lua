@@ -264,7 +264,7 @@ local seedStock={}
 
 
 local Window = Fluent:CreateWindow({
-    Title = "J4Z4 HUB " .. "Beta V.2.3",
+    Title = "J4Z4 HUB " .. "Release V.3",
     SubTitle = "by darkflower",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
@@ -333,57 +333,58 @@ do
 
     Toggle:OnChanged(function()
         print("Auto harvest: ", Options.MyToggle.Value)
+    end)
+        task.spawn(function()
+    while true do
+        task.wait(0.5) -- ปรับเวลาเช็ค Toggle ให้เหมาะสม ไม่ต้องเร็วเกินไป
+        
         if Options.MyToggle.Value then
-    print("A")
-    
-	    local folderplantpath = game.Workspace.ClientPlants
-local plantposition = {}
+            local folderplantpath = workspace:FindFirstChild("ClientPlants")
+            if not folderplantpath then continue end
 
---locate position and put it in table
-for i, plant in pairs(folderplantpath:GetChildren()) do
-    for j, rootpart in pairs(plant:GetDescendants()) do
-        if (rootpart.Name == "FruitAnchor" or rootpart.Name == "PlantAnchor") and rootpart:IsA("BasePart") then
-            table.insert(plantposition, rootpart.Position)
+            
+            local plantposition = {}
+            for _, plant in ipairs(folderplantpath:GetChildren()) do
+                for _, rootpart in ipairs(plant:GetDescendants()) do
+                    if (rootpart.Name == "FruitAnchor" or rootpart.Name == "PlantAnchor") and rootpart:IsA("BasePart") then
+                        table.insert(plantposition, rootpart.Position)
+                    end
+                end
+            end
+
+            
+            for _, pos in ipairs(plantposition) do
+                
+                if not Options.MyToggle.Value then break end
+
+                local char = game.Players.LocalPlayer.Character
+                local hrp = char and char:FindFirstChild("HumanoidRootPart")
+                
+                if hrp then
+                    
+                    hrp.AssemblyLinearVelocity = Vector3.zero
+                    hrp.AssemblyAngularVelocity = Vector3.zero
+
+                    
+                    hrp.CFrame = CFrame.new(pos + Vector3.new(0, 3, 0))
+
+                    task.wait(0.2)
+                    
+                    
+                    local vim = game:GetService("VirtualInputManager")
+                    vim:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+                    task.wait(0.05)
+                    vim:SendKeyEvent(false, Enum.KeyCode.E, false, game)
+                    
+                    task.wait(0.5) เ
+                end
+            end
         end
     end
-end
+end)
+        
 
---loop TP
-for i, pos in ipairs(plantposition) do
-    local char = game.Players.LocalPlayer.Character
-    local hrp = char:FindFirstChild("HumanoidRootPart")
     
-    if hrp then
-        -- Res velo prev take off
-        hrp.AssemblyLinearVelocity = Vector3.zero
-        hrp.AssemblyAngularVelocity = Vector3.zero
-
-       --new pos but +3y prev drowning
-        hrp.CFrame = CFrame.new(pos + Vector3.new(0, 3, 0))
-
-        task.wait(0.2)
-        
-        -- fake hit E
-        local vim = game:GetService("VirtualInputManager")
-        vim:SendKeyEvent(true, Enum.KeyCode.E, false, game)
-        task.wait(0.1)
-        vim:SendKeyEvent(false, Enum.KeyCode.E, false, game)
-        
-        task.wait(0.5) 
-      if Options.MyToggle.Value==false then
-   break
-      end
-    end
-     
-end
-	else
-        
-	  print("B")  
-        
-    end 
-        
-
-    end)
         local Toggle2 = Tabs.Main:AddToggle("MyToggle2", {Title = "Auto plant seed", Default = false })
 
     Toggle2:OnChanged(function()
