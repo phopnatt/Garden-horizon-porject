@@ -648,7 +648,7 @@ repeat
 
 --workspace.sookerut_V1["x3 Tomato Seed"]
 pcall(function()print(char[tostring(randomedseed)]:GetAttribute("PlantType")) end)
-Autoplant(char[tostring(randomedseed)]:GetAttribute("PlantType"))
+pcall(function()Autoplant(char[tostring(randomedseed)]:GetAttribute("PlantType")) end)
     
 local success, isVisible = pcall(function()
     return game:GetService("Players").LocalPlayer.PlayerGui.Notification.Frame:GetChildren()[5].Visible
@@ -667,7 +667,7 @@ end
 
 
 task.wait(0.1)
-until not char:FindFirstChild(randomedseed)
+until not pcall(function()char:FindFirstChild(randomedseed) end)
 print(randomedseed)
 randomedseed=nil
 pcall(function()AutoEquipgear("Watering Can")
