@@ -276,7 +276,10 @@ local Window = Fluent:CreateWindow({
 --Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
+    Shops = Window:AddTab({ Title = "Shops", Icon = "" }),
     Kaiton = Window:AddTab({ Title = "Kaiton", Icon = "" }),
+    Misc = Window:AddTab({ Title = "Miscellaneous", Icon = "" }),
+    Webhook = Window:AddTab({ Title = "Webhook", Icon = "" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
@@ -299,7 +302,7 @@ do
 
 
 
-    Tabs.Main:AddButton({
+    Tabs.Shops:AddButton({
         Title = "Sell all",
         Description = "Click to sell all",
         Callback = function()
@@ -385,34 +388,61 @@ end)
         
 
     
-        local Toggle2 = Tabs.Main:AddToggle("MyToggle2", {Title = "Auto plant seed", Default = false })
+        local Toggle2 = Tabs.Main:AddToggle("MyToggle2", {Title = "Auto plant seed", Default = false})
 
-    Toggle2:OnChanged(function()
-        print("Toggle changed:", Options.MyToggle2.Value)
-    end)
-    task.spawn(function()
+Toggle2:OnChanged(function()
+    print("Toggle changed:", Options.MyToggle2.Value)
+end)
+
+task.spawn(function()
     while true do
-        
         task.wait(0.1) 
-
-        if Options.MyToggle2.Value == true then
-            task.wait(1)
+       
+        if Options.MyToggle2.Value==true then
             Autotp2startaxist()
-            AutoEquipseed()
+            pcall(function() AutoEquipseed() end)
+            
+            local player = game:GetService("Players").LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
 
-            for i, v in pairs(seedlist) do
+            
+            repeat
+                if  Options.MyToggle2.Value==false then break end
                 
-                if not Options.MyToggle2.Value then break end
-
-                task.wait(0.1)
-                for i = 1, 5 do
-                    
-                    if not Options.MyToggle2.Value then break end
-                    
-                    Autoplant(v)
-                    task.wait(0.05)
+                
+                local currentSeed = nil
+                for _, v in pairs(char:GetChildren()) do
+                    if string.find(v.Name, "Seed") then
+                        currentSeed = v
+                        break 
+                    end
                 end
-            end
+
+                if currentSeed then
+                    local seedName = currentSeed.Name
+                    local plantType = currentSeed:GetAttribute("PlantType")
+                    
+                    if plantType then
+                        print("Planting:", plantType)
+                        pcall(function() Autoplant(plantType) end)
+                    end
+                    
+                    
+                    local success, isVisible = pcall(function()
+                        return player.PlayerGui.Notification.Frame:GetChildren()[5].Visible
+                    end)
+
+                    if success and isVisible then
+                        print("Inventory full or limit reached")
+                        break
+                    end
+                else
+                    print("No seed found in character")
+                    break 
+                end
+
+                task.wait(0.5) 
+            until not char:FindFirstChild(currentSeed and currentSeed.Name or "") or not Options.MyToggle2.Value
         end
     end
 end)
@@ -427,7 +457,7 @@ end)
 
 
     
-  Tabs.Main:AddParagraph({
+  Tabs.Shops:AddParagraph({
         Title = "Auto buy seed",
         Content = "Every seed function will be placed here"
     })
@@ -442,7 +472,7 @@ end)
     seedStock={}
         end
     end) end)
-    local MultiDropdown = Tabs.Main:AddDropdown("MultiDropdown", {
+    local MultiDropdown = Tabs.Shops:AddDropdown("MultiDropdown", {
         Title = "Seed sniper",
         Description = "Select seed sniper list",
         Values = seedlist,
@@ -466,7 +496,7 @@ end)
 
 
 
-    local Toggle3 = Tabs.Main:AddToggle("MyToggle3", {Title = "Auto Seed sniper", Default = false })
+    local Toggle3 = Tabs.Shops:AddToggle("MyToggle3", {Title = "Auto Seed sniper", Default = false })
 
      task.spawn(function()
     while true do
@@ -492,7 +522,7 @@ end)
     end
 end)
 
-     local Toggle4 = Tabs.Main:AddToggle("MyToggle4", {Title = "Auto buy all seeds", Default = false })
+     local Toggle4 = Tabs.Shops:AddToggle("MyToggle4", {Title = "Auto buy all seeds", Default = false })
 
 Toggle4:OnChanged(function()
     print("Toggle changed:", Options.MyToggle4.Value)
@@ -518,7 +548,7 @@ task.spawn(function()
     
     end
 end)
-  Tabs.Main:AddParagraph({
+  Tabs.Shops:AddParagraph({
         Title = "Gear shop",
         Content = "Gear shop function will be placed here"
     })
@@ -531,7 +561,7 @@ task.spawn(function()
         stockkkinggear={}
     end
 end)
-        local MultiDropdown2 = Tabs.Main:AddDropdown("MultiDropdown2", {
+        local MultiDropdown2 = Tabs.Shops:AddDropdown("MultiDropdown2", {
         Title = "Gear sniper",
         Description = "Select your gear sniper list",
         Values = {"Super sprinkler","Turbo Sprinkler","Basic Sprinkler","Watering Can","Harvest Bell","Trowel","Favorite Tool"},
@@ -553,7 +583,7 @@ end)
         print("Mutlidropdown changed:", table.concat(Values, ", "))
     end)
     
-       local Toggle8 = Tabs.Main:AddToggle("MyToggle8", {Title = "Auto gear sniper", Default = false })
+       local Toggle8 = Tabs.Shops:AddToggle("MyToggle8", {Title = "Auto gear sniper", Default = false })
 
     Toggle8:OnChanged(function()
         print("Toggle changed:", Options.MyToggle8.Value)
@@ -666,7 +696,7 @@ end
 
 
 task.wait(0.1)
-until not pcall(function()char:FindFirstChild(randomedseed) end) or (success and isVisible == true )
+until not pcall(function() char:FindFirstChild(randomedseed) end) or (success and isVisible == true)
 print(randomedseed)
 randomedseed=nil
 pcall(function()AutoEquipgear("Watering Can")
@@ -695,16 +725,82 @@ end
 
 
  
+Tabs.Misc:AddParagraph({
+        Title = "Miscellaneous",
+        Content = "Notthing just misc"
+    })
 
-    
+    local Toggle10 = Tabs.Misc:AddToggle("MyToggle10", {Title = "Fast mode", Default = false })
 
-    
+    Toggle10:OnChanged(function()
+        print("Toggle changed:", Options.MyToggle10.Value)
+    end)
+    task.spawn(function()
+        while true do
+        if Options.MyToggle10.Value==true then
+local args = {
+    [1] = "LowDetail",
+    [2] = true
+}
 
+game:GetService("ReplicatedStorage").RemoteEvents.UpdateSettings:FireServer(unpack(args))
+else
+  
+local args = {
+    [1] = "LowDetail",
+    [2] = false
+}
 
+game:GetService("ReplicatedStorage").RemoteEvents.UpdateSettings:FireServer(unpack(args))
 
+        end
+        task.wait(1)
+        end
+    end)
+  local Input = Tabs.Misc:AddInput("Input", {
+
+        Title = "Your FPS cap",
+        Default = "60",
+        Placeholder = "Placeholder",
+        Numeric = true, -- Only allows numbers
+        Finished = false, -- Only calls callback when you press enter
+        Callback = function(Value)
+            print("Input changed:", Value)
+        end
+    })
+    Input:OnChanged(function()
+        print("Input updated:", Input.Value)
+    end)
+
+     local Toggle10 = Tabs.Misc:AddToggle("MyToggle10", {Title = "Set FPS cap", Default = false })
+    Toggle10:OnChanged(function()
+        print("Toggle changed:", Options.MyToggle10.Value)
+
+    end)
+    task.spawn(function()
+    while true do
+        if Options.MyToggle10.Value == true then
+            setfpscap(tonumber(Input.Value))
+        end
+        task.wait(0.1)
+    end
+end)
+
+Tabs.Webhook:AddParagraph({
+        Title = "Webhook",
+        Content = "Webhook will be added soon"
+    })
 
 
 end
+
+
+
+
+
+
+
+
 
 
 -- Addons:
