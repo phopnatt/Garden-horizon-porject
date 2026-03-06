@@ -599,7 +599,6 @@ while true do
     task.wait(1)
     if Options.MyToggle5.Value==true then
     task.wait(1)
-Autocheckseedstock()
 for i=1,3 do
 for i,j in pairs(seedStock) do
     task.wait(1)
@@ -627,12 +626,8 @@ for i,u in pairs(Gearshoplist) do
 Autousesprinkler(u)
 end
 pcall(function()AutoEquipseed() end)
-print("Kuytok")
-
 local player=game:GetService("Players").LocalPlayer.Name  --Fix laterr
 print(player)--this should not be gobal fixxxxx
-local char=nil
-pcall(function()
 for i,v in pairs(workspace:GetChildren()) do
     task.wait(0.1)
 if player==v.Name then
@@ -644,12 +639,10 @@ repeat
 
 
 
-for i,v in pairs(seedlist) do
-    task.wait(0.1)
-    for i=1,5 do
-Autoplant(v)
-    end
-end
+--workspace.sookerut_V1["x3 Tomato Seed"]
+print(char[tostring(randomedseed)]:GetAttribute("PlantType"))
+Autoplant(char[tostring(randomedseed)]:GetAttribute("PlantType"))
+    
 
 for i,v in pairs(char:GetChildren()) do
     task.wait(0.1)
@@ -663,8 +656,6 @@ end
 task.wait(0.1)
 until not char:FindFirstChild(randomedseed)
 print(randomedseed)
---not string.find(randomedseed,"x")
-end)
 randomedseed=nil
 pcall(function()AutoEquipgear("Watering Can")
 end)--equip gear
