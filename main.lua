@@ -673,7 +673,7 @@ pcall(function()AutoEquipgear("Watering Can")
 end)--equip gear
 task.spawn(function()
 for i=1,10 do
-task.wait(1)
+task.wait(0.1)
 Autousegear("Watering Can")
 end
 end)
