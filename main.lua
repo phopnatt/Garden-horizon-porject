@@ -438,7 +438,7 @@ end)
         while true do
             
         Autocheckseedstock() 
-    task.wait(30)
+    task.wait(2)
     seedStock={}
         end
     end) end)
@@ -654,9 +654,8 @@ local success, isVisible = pcall(function()
     return game:GetService("Players").LocalPlayer.PlayerGui.Notification.Frame:GetChildren()[5].Visible
 end)
 
-if success and isVisible == true then
-    break
-end
+ 
+   
 for i,v in pairs(char:GetChildren()) do
     task.wait(0.1)
 if string.find(v.Name,"Seed") then
@@ -667,7 +666,7 @@ end
 
 
 task.wait(0.1)
-until not pcall(function()char:FindFirstChild(randomedseed) end)
+until not pcall(function()char:FindFirstChild(randomedseed) end) or (success and isVisible == true )
 print(randomedseed)
 randomedseed=nil
 pcall(function()AutoEquipgear("Watering Can")
