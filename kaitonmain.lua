@@ -236,8 +236,7 @@ print(randomedgear)
 
 character.Humanoid:EquipTool(randomedgear)
 end
-pcall(function()while true do
-    task.wait(1)
+
 
 pcall(function()Autocheckseedstock() end)
 for i=1,3 do
@@ -269,10 +268,9 @@ end
 pcall(function()AutoEquipseed() end)
 print("Kuytok")
 
+pcall(function()AutoEquipseed() end)
 local player=game:GetService("Players").LocalPlayer.Name  --Fix laterr
 print(player)--this should not be gobal fixxxxx
-local char=nil
-pcall(function()
 for i,v in pairs(workspace:GetChildren()) do
     task.wait(0.1)
 if player==v.Name then
@@ -284,13 +282,17 @@ repeat
 
 
 
-for i,v in pairs(seedlist) do
-    task.wait(0.1)
-    for i=1,5 do
-Autoplant(v)
-    end
-end
+--workspace.sookerut_V1["x3 Tomato Seed"]
+print(char[tostring(randomedseed)]:GetAttribute("PlantType"))
+Autoplant(char[tostring(randomedseed)]:GetAttribute("PlantType"))
+    
+local success, isVisible = pcall(function()
+    return game:GetService("Players").LocalPlayer.PlayerGui.Notification.Frame:GetChildren()[5].Visible
+end)
 
+if success and isVisible == true then
+    break
+end
 for i,v in pairs(char:GetChildren()) do
     task.wait(0.1)
 if string.find(v.Name,"Seed") then
@@ -303,8 +305,6 @@ end
 task.wait(0.1)
 until not char:FindFirstChild(randomedseed)
 print(randomedseed)
---not string.find(randomedseed,"x")
-end)
 randomedseed=nil
 pcall(function()AutoEquipgear("Watering Can")
 end)--equip gear
@@ -323,8 +323,8 @@ end
 task.spawn(function()
     Autoclaimquest()
 end)
-end
-end)
+
+
 
 
 

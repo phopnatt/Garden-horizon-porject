@@ -434,7 +434,14 @@ end)
     
 
 
-    pcall(function()task.spawn(function()Autocheckseedstock() end) end)
+    pcall(function()task.spawn(function()
+        while true do
+            
+        Autocheckseedstock() 
+    task.wait(30)
+    seedStock={}
+        end
+    end) end)
     local MultiDropdown = Tabs.Main:AddDropdown("MultiDropdown", {
         Title = "Seed sniper",
         Description = "Select seed sniper list",
@@ -618,7 +625,7 @@ end
 if game:GetService("Players")["LocalPlayer"].leaderstats.Shillings.Value>200000 then
  Autobuygearshop("Super Sprinkler")
 end
-seedStock={}
+
 Autotp2startaxist()
 pcall(function()AutoEquipgear("Sprinkler") end)-- equip sprinkler
 task.wait(4)
@@ -640,15 +647,21 @@ repeat
 
 
 --workspace.sookerut_V1["x3 Tomato Seed"]
-print(char[tostring(randomedseed)]:GetAttribute("PlantType"))
+pcall(function()print(char[tostring(randomedseed)]:GetAttribute("PlantType")) end)
 Autoplant(char[tostring(randomedseed)]:GetAttribute("PlantType"))
     
+local success, isVisible = pcall(function()
+    return game:GetService("Players").LocalPlayer.PlayerGui.Notification.Frame:GetChildren()[5].Visible
+end)
 
+if success and isVisible == true then
+    break
+end
 for i,v in pairs(char:GetChildren()) do
     task.wait(0.1)
 if string.find(v.Name,"Seed") then
     print(v)
-    randomedseed=v.name
+    randomedseed=v.Name
 end
 end
 
