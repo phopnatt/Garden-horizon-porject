@@ -790,6 +790,7 @@ print(randomedseed)
 randomedseed=nil
 pcall(function()AutoEquipgear("Watering Can")
 end)--equip gear
+pcall(function()task.spawn(function()Autoharvestremote() end) end)
 task.spawn(function()
 for i=1,10 do
 task.wait(0.1)
@@ -798,7 +799,7 @@ end
 end)
 task.wait(0.5)
 Autotp2startaxist()
-pcall(function()Autoharvestremote() end)
+task.wait(60)
 for i=1,3 do
     task.wait(1)
 Autosellall()
