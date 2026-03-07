@@ -86,7 +86,7 @@ task.spawn(function()
         vu:Button1Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
         task.wait(0.5) 
         vu:Button1Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-        task.wait(30) 
+        task.wait(600) 
     end
 end)
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(unpack(sellipos))--sell pos
