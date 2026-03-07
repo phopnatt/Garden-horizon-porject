@@ -76,7 +76,7 @@ sellipos =
 
 
 
-print("Anti-AFK (Loop 30s) เริ่มทำงานแล้ว!")
+
 
 
 task.spawn(function()
