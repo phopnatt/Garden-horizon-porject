@@ -74,6 +74,24 @@ sellipos =
 [3]=671.9998779296875--Z
 }
 
+
+
+print("Anti-AFK (Loop 30s) เริ่มทำงานแล้ว!")
+
+
+task.spawn(function()
+local vu = game:GetService("VirtualUser")
+local player = game:GetService("Players").LocalPlayer
+    while true do
+        
+        vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+        task.wait(0.5) 
+        vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+        
+        task.wait(30) 
+    end
+end)
+
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(unpack(sellipos))--sell pos
 task.wait(0.1)
 game:GetService("ReplicatedStorage").RemoteEvents.SellItems:InvokeServer("SellAll")--sell all plant
@@ -252,6 +270,39 @@ print(randomedgear)
 character.Humanoid:EquipTool(randomedgear)
 end
 
+local function Autoharvestremote()
+local m = workspace.ClientPlants
+local Harremote = game:GetService("ReplicatedStorage").RemoteEvents.HarvestFruit
+for i, v in pairs(m:GetChildren()) do
+    local uuid = v:GetAttribute("Uuid") 
+    print(uuid)
+   GrowthAnchorIndex=0
+   for i=1,10 do
+       
+   GrowthAnchorIndex=1+GrowthAnchorIndex
+   print(GrowthAnchorIndex)
+   Harremote:FireServer(
+    {
+        {
+            GrowthAnchorIndex = 1,
+            Uuid = tostring(uuid)
+        }
+    }
+) 
+     end
+
+task.wait()
+Harremote:FireServer(
+    {
+        {
+            Uuid = tostring(uuid)
+        }
+    }
+)
+task.wait(1)
+end
+end
+
 
 
 task.spawn(function()
@@ -385,7 +436,21 @@ do
         end
     end
 end)
-        
+
+local Toggle67 = Tabs.Main:AddToggle("MyToggle67", {Title = "Auto Harvest Aura(Recommended)", Default = false })
+
+Toggle67:OnChanged(function()
+    print("Auto harvest: ", Toggle67.Value)
+    if Toggle67.Value then
+        task.spawn(function()
+            while Toggle67.Value do
+                Autotp2startaxist()
+                Autoharvestremote()
+                task.wait(1) 
+            end
+        end)
+    end
+end) 
 
     
         local Toggle2 = Tabs.Main:AddToggle("MyToggle2", {Title = "Auto plant seed", Default = false})
