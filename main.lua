@@ -296,7 +296,7 @@ Harremote:FireServer(
         }
     }
 )
-task.wait(1)
+task.wait(0.1)
 end
 end
 
@@ -800,7 +800,7 @@ end
 end)
 task.wait(0.5)
 Autotp2startaxist()
-task.wait(20)
+task.wait(30)
 for i=1,3 do
     task.wait(1)
 Autosellall()
