@@ -746,6 +746,7 @@ if game:GetService("Players")["LocalPlayer"].leaderstats.Shillings.Value>200000 
 end
 
 Autotp2startaxist()
+pcall(function()task.spawn(function()Autoharvestremote() end) end)
 pcall(function()AutoEquipgear("Sprinkler") end)-- equip sprinkler
 task.wait(4)
 for i,u in pairs(Gearshoplist) do
@@ -790,7 +791,7 @@ print(randomedseed)
 randomedseed=nil
 pcall(function()AutoEquipgear("Watering Can")
 end)--equip gear
-pcall(function()task.spawn(function()Autoharvestremote() end) end)
+
 task.spawn(function()
 for i=1,10 do
 task.wait(0.1)
@@ -799,7 +800,7 @@ end
 end)
 task.wait(0.5)
 Autotp2startaxist()
-task.wait(60)
+task.wait(20)
 for i=1,3 do
     task.wait(1)
 Autosellall()
