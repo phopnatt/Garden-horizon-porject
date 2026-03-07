@@ -80,18 +80,15 @@ print("Anti-AFK (Loop 30s) เริ่มทำงานแล้ว!")
 
 
 task.spawn(function()
-local vu = game:GetService("VirtualUser")
-local player = game:GetService("Players").LocalPlayer
+    local vu = game:GetService("VirtualUser")
+    local player = game:GetService("Players").LocalPlayer
     while true do
-        
-        vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
+        vu:Button1Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
         task.wait(0.5) 
-        vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-        
+        vu:Button1Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
         task.wait(30) 
     end
 end)
-
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(unpack(sellipos))--sell pos
 task.wait(0.1)
 game:GetService("ReplicatedStorage").RemoteEvents.SellItems:InvokeServer("SellAll")--sell all plant
