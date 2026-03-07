@@ -446,6 +446,33 @@ task.spawn(function()
         end
     end
 end)
+
+ local Toggle82 = Tabs.Main:AddToggle("MyToggle82", {Title = "Auto Shove all plant(please be careful using this)", Default = false })
+
+    Toggle82:OnChanged(function()
+        print("Toggle changed:", Options.MyToggle82.Value)
+    end)
+    task.spawn(function()
+    while true do
+        if Options.MyToggle82.Value==true then
+    
+    local m = workspace.ClientPlants
+Autotp2startaxist()
+for i, v in pairs(m:GetChildren()) do
+    local uuid = v:GetAttribute("Uuid") 
+    print(uuid)
+    
+    
+local shove = game:GetService("ReplicatedStorage").RemoteEvents.RemovePlant
+if Options.MyToggle82.Value==false then break end
+shove:FireServer(tostring(uuid),nil)
+task.wait(1)
+end
+    end
+task.wait(1)
+end
+end)
+     
     
 
    
@@ -612,7 +639,7 @@ while true do
     end
 
 end)
-        
+   
     
 
    
