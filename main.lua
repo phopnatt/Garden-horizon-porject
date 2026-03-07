@@ -296,7 +296,7 @@ Harremote:FireServer(
         }
     }
 )
-task.wait(0.5)
+task.wait(0.1)
 end
 end
 
@@ -441,7 +441,6 @@ Toggle67:OnChanged(function()
     if Toggle67.Value then
         task.spawn(function()
             while Toggle67.Value do
-                Autotp2startaxist()
                 Autoharvestremote()
                 task.wait(1) 
             end
