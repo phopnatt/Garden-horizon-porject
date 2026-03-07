@@ -797,7 +797,8 @@ Autousegear("Watering Can")
 end
 end)
 task.wait(0.5)
-pcall(function()Autoharvest() end)
+Autotp2startaxist()
+pcall(function()Autoharvestremote() end)
 for i=1,3 do
     task.wait(1)
 Autosellall()
